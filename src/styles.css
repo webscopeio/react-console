@@ -9,10 +9,10 @@
   font-size: 13px;
   padding: 10px;
   height: 300px;
+  overflow-y: auto;
 }
 
 .output {
-  overflow-y: auto;
 }
 
 .promptWrapper {
@@ -20,10 +20,11 @@
 }
 
 .input {
-  margin-left: 3px;
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
   color: white;
+  font-family: monospace;
+  font-size: 13px;
 }
