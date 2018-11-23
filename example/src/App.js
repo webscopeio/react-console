@@ -7,6 +7,8 @@ export default class App extends Component {
     return (
       <div>
         <ReactConsole
+          autoFocus
+          welcomeMessage="Welcome"
           commands={{
             echo: {
               description: 'Echo',
@@ -14,6 +16,16 @@ export default class App extends Component {
                 return new Promise((resolve, reject) => {
                   setTimeout(() => {
                     resolve(`${args.join(' ')}`)
+                  }, 2000)
+                })
+              }
+            },
+            test: {
+              description: 'Test',
+              fn: (...args) => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve('Hello world \n\n hello \n')
                   }, 2000)
                 })
               }

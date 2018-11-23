@@ -12,16 +12,19 @@
   overflow-y: auto;
 }
 
-.output {
-}
-
 .promptWrapper {
   display: flex;
 }
 
+.line {
+  font-size: 13px;
+  line-height: 13px;
+  background: transparent !important; /* we want to make this transparent whatever happens in the app*/
+}
+
 .input {
   flex: 1;
-  background: transparent;
+  background: transparent !important; /* we want to make this transparent whatever happens in the app*/
   border: none;
   outline: none;
   color: white;
