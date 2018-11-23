@@ -1,12 +1,25 @@
 import React, { Component } from 'react'
 
-import ExampleComponent from 'react-console'
+import ReactConsole from 'react-console'
 
 export default class App extends Component {
   render () {
     return (
       <div>
-        <ExampleComponent text='Modern React component module' />
+        <ReactConsole
+          commands={{
+            echo: {
+              description: 'Echo',
+              fn: (...args) => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve(`${args.join(' ')}`)
+                  }, 2000)
+                })
+              }
+            }
+          }}
+        />
       </div>
     )
   }

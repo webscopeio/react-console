@@ -1,8 +1,29 @@
 /* add css styles here (optional) */
 
-.test {
-  display: inline-block;
-  margin: 2em auto;
-  border: 2px solid #000;
-  font-size: 2em;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 10px;
+  height: 300px;
+}
+
+.output {
+  overflow-y: auto;
+}
+
+.promptWrapper {
+  display: flex;
+}
+
+.input {
+  margin-left: 3px;
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
 }
