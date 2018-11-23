@@ -10,6 +10,10 @@
 npm install --save @webscopeio/react-console
 ```
 
+## Screenshot
+
+![Webscope React Console](https://user-images.githubusercontent.com/1083817/48961581-14dce380-ef76-11e8-9d89-66c3815e46fe.png)
+
 ## Usage
 
 ```tsx
