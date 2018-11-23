@@ -6,7 +6,7 @@
   background-color: black;
   color: white;
   font-family: monospace;
-  font-size: 13px;
+  font-size: 12px;
   padding: 10px;
   height: 300px;
   overflow-y: auto;
@@ -17,9 +17,12 @@
 }
 
 .line {
-  font-size: 13px;
-  line-height: 13px;
+  font-size: 12px;
+  line-height: 12px;
+  font-family: monospace;
   background: transparent !important; /* we want to make this transparent whatever happens in the app*/
+  padding: 0;
+  color: white;
 }
 
 .input {
