@@ -7,23 +7,51 @@
 ## Install
 
 ```bash
-npm install --save react-console
+npm install --save @webscopeio/react-console
 ```
 
 ## Usage
 
 ```tsx
-import * as React from 'react'
+import React, { Component } from 'react'
 
-import MyComponent from 'react-console'
+import ReactConsole from 'react-console'
 
-class Example extends React.Component {
+export default class App extends Component {
   render () {
     return (
-      <MyComponent />
+      <div>
+        <ReactConsole
+          autoFocus
+          welcomeMessage="Welcome"
+          commands={{
+            echo: {
+              description: 'Echo',
+              fn: (...args) => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve(`${args.join(' ')}`)
+                  }, 2000)
+                })
+              }
+            },
+            test: {
+              description: 'Test',
+              fn: (...args) => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve('Hello world \n\n hello \n')
+                  }, 2000)
+                })
+              }
+            }
+          }}
+        />
+      </div>
     )
   }
 }
+
 ```
 
 ## License
