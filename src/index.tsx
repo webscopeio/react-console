@@ -17,11 +17,11 @@ export type Props = {
 type State = {
   output: Array<string>,
   commandInProgress: boolean,
+  input: string,
 }
 
 export default class ReactConsole extends React.Component<Props, State> {
 
-  formRef: any = null;
   inputRef: any = null;
   wrapperRef: any = null;
 
@@ -31,6 +31,7 @@ export default class ReactConsole extends React.Component<Props, State> {
   };
 
   state = {
+    input: '',
     output: [],
     commandInProgress: false,
   };
@@ -44,16 +45,11 @@ export default class ReactConsole extends React.Component<Props, State> {
     }
   }
 
-
-  scrollToBottom = () => {
-    this.wrapperRef.scrollTo(0, this.wrapperRef.scrollHeight)
-  };
-
   onSubmit = async (e: any) => {
-    const {prompt} = this.props
+    const {prompt} = this.props;
     e.preventDefault();
-    const data = new FormData(e.target);
-    const inputString: string = data.get('input') as string;
+
+    const inputString: string = this.state.input
     if (inputString === null) {
       return
     }
@@ -61,16 +57,17 @@ export default class ReactConsole extends React.Component<Props, State> {
     const log = `${prompt}\xa0${inputString}`;
 
     if(inputString === '') {
-      this.setState({ output: [...this.state.output, log]})
-      this.formRef.reset()
+      this.setState({
+        output: [...this.state.output, log],
+        input: '',
+      });
       return
     }
 
     const [cmd, ...args] = inputString.split(" ");
 
     if(cmd === 'clear') {
-      this.formRef.reset()
-      this.setState({output: []})
+      this.setState({output: [], input: ''})
       return
     }
 
@@ -88,15 +85,13 @@ export default class ReactConsole extends React.Component<Props, State> {
       } catch (err) {
 
       }
-      this.scrollToBottom()
 
     } else {
       this.setState({
         output: [...this.state.output, log, `Command '${cmd}' does not exist`]
-      }, this.scrollToBottom)
+      })
     }
-    this.formRef.reset()
-    this.setState({commandInProgress: false});
+    this.setState({commandInProgress: false, input: ''});
     this.inputRef.focus()
   };
 
@@ -114,7 +109,6 @@ export default class ReactConsole extends React.Component<Props, State> {
           )}
         </div>
         <form
-          ref={ref => this.formRef = ref}
           onSubmit={this.onSubmit}
         >
           <div className={styles.promptWrapper}>
@@ -123,6 +117,8 @@ export default class ReactConsole extends React.Component<Props, State> {
               disabled={this.state.commandInProgress}
               ref={ref => this.inputRef = ref}
               autoFocus={autoFocus}
+              value={this.state.input}
+              onChange={this.onInputChange}
               autoComplete={'off'}
               spellCheck={false}
               autoCapitalize={'false'}
@@ -133,6 +129,12 @@ export default class ReactConsole extends React.Component<Props, State> {
         </form>
       </div>
     )
+  }
+
+  onInputChange = (e: any) => {
+    this.setState({
+      input: e.target.value,
+    })
   }
 
   focusConsole = () => {
