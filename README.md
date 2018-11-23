@@ -1,3 +1,5 @@
+MIT-licensed console emulator in React. Documentation and more advanced features coming soon!
+
 # react-console
 
 > React component that emulates console behaviour
@@ -9,6 +11,10 @@
 ```bash
 npm install --save @webscopeio/react-console
 ```
+
+## Demo
+
+https://webscopeio.github.io/react-console/
 
 ## Screenshot
 
