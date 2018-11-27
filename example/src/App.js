@@ -8,7 +8,8 @@ export default class App extends Component {
       <div>
         <ReactConsole
           autoFocus
-          welcomeMessage="This is a welcome message 🎉🎉🎉"
+          welcomeMessage="This is a <b>welcome</b> message 🎉🎉🎉"
+          prompt={'$'}
           commands={{
             echo: {
               description: 'Echo',
@@ -31,6 +32,9 @@ export default class App extends Component {
               }
             }
           }}
+          noCommandFound={() => new Promise((resolve, reject) => {
+            resolve('No command found')
+          })}
         />
         <table>
           <tr>

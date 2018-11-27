@@ -8,10 +8,11 @@ import styles from './styles.css'
 
 export type Props = {
   text: string,
-  prompt: React.Component,
+  prompt: string,
   commands: any,
   welcomeMessage?: string,
   autoFocus: boolean,
+  noCommandFound: (str: string) => Promise<string>,
 }
 
 type State = {
@@ -28,6 +29,7 @@ export default class ReactConsole extends React.Component<Props, State> {
   static defaultProps = {
     prompt: '$',
     autoFocus: false,
+    noCommandFound: (cmd: string) => Promise.resolve(`Command ${cmd} does not exist`),
   };
 
   state = {
@@ -71,7 +73,7 @@ export default class ReactConsole extends React.Component<Props, State> {
     const [cmd, ...args] = inputString.split(" ");
 
     if(cmd === 'clear') {
-      this.clear()
+      this.clear();
       return
     }
 
@@ -91,8 +93,9 @@ export default class ReactConsole extends React.Component<Props, State> {
       }
 
     } else {
+      const cmdNotFound = await this.props.noCommandFound(cmd);
       this.setState({
-        output: [...this.state.output, log, `Command '${cmd}' does not exist`]
+        output: [...this.state.output, log, cmdNotFound]
       })
     }
     this.setState({commandInProgress: false, input: ''});
@@ -109,7 +112,11 @@ export default class ReactConsole extends React.Component<Props, State> {
       <div className={styles.wrapper} onClick={this.focusConsole} ref={ref => this.wrapperRef = ref}>
         <div>
           {this.state.output.map((line, key) =>
-            <pre key={key} className={styles.line}>{line}</pre>
+            <pre
+              key={key}
+              className={styles.line}
+              dangerouslySetInnerHTML={{__html: line}}
+            />
           )}
         </div>
         <form
