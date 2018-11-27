@@ -45,6 +45,10 @@ export default class ReactConsole extends React.Component<Props, State> {
     }
   }
 
+  clear = () => {
+    this.setState({output: [], input: ''})
+  };
+
   onSubmit = async (e: any) => {
     const {prompt} = this.props;
     e.preventDefault();
@@ -67,7 +71,7 @@ export default class ReactConsole extends React.Component<Props, State> {
     const [cmd, ...args] = inputString.split(" ");
 
     if(cmd === 'clear') {
-      this.setState({output: [], input: ''})
+      this.clear()
       return
     }
 
@@ -112,7 +116,7 @@ export default class ReactConsole extends React.Component<Props, State> {
           onSubmit={this.onSubmit}
         >
           <div className={styles.promptWrapper}>
-            <span>{prompt}&nbsp;</span>
+            <span className={styles.prompt}>{prompt}&nbsp;</span>
             <input
               disabled={this.state.commandInProgress}
               ref={ref => this.inputRef = ref}

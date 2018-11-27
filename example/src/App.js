@@ -3,12 +3,12 @@ import React, { Component } from 'react'
 import ReactConsole from 'react-console'
 
 export default class App extends Component {
-  render () {
+  render() {
     return (
       <div>
         <ReactConsole
           autoFocus
-          welcomeMessage="Welcome"
+          welcomeMessage="This is a welcome message 🎉🎉🎉"
           commands={{
             echo: {
               description: 'Echo',
@@ -16,22 +16,32 @@ export default class App extends Component {
                 return new Promise((resolve, reject) => {
                   setTimeout(() => {
                     resolve(`${args.join(' ')}`)
-                  }, 2000)
+                  }, 0)
                 })
               }
             },
-            test: {
-              description: 'Test',
-              fn: (...args) => {
+            sleep: {
+              description: 'sleep',
+              fn: (timeout) => {
                 return new Promise((resolve, reject) => {
                   setTimeout(() => {
-                    resolve('Hello world \n\n hello \n')
-                  }, 2000)
+                    resolve('')
+                  }, timeout)
                 })
               }
             }
           }}
         />
+        <table>
+          <tr>
+            <td><code>echo ...args</code></td>
+            <td>Echo</td>
+          </tr>
+          <tr>
+            <td><code>sleep `ms`</code></td>
+            <td>Sleeps for a number of milliseconds</td>
+          </tr>
+        </table>
       </div>
     )
   }

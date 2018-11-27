@@ -25,6 +25,11 @@
   color: white;
 }
 
+.prompt {
+  display: flex;
+  align-items: center;
+}
+
 .input {
   flex: 1;
   background: transparent !important; /* we want to make this transparent whatever happens in the app*/
