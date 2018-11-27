@@ -13,6 +13,7 @@ export type Props = {
   welcomeMessage?: string,
   autoFocus: boolean,
   noCommandFound: (str: string) => Promise<string>,
+  promptClassName?: string,
 }
 
 type State = {
@@ -106,7 +107,12 @@ export default class ReactConsole extends React.Component<Props, State> {
     const {
       prompt,
       autoFocus,
+      promptClassName,
     } = this.props;
+
+    const promptClass = promptClassName
+      ? `${styles.prompt} ${promptClassName}`
+      : styles.prompt;
 
     return (
       <div className={styles.wrapper} onClick={this.focusConsole} ref={ref => this.wrapperRef = ref}>
@@ -123,7 +129,9 @@ export default class ReactConsole extends React.Component<Props, State> {
           onSubmit={this.onSubmit}
         >
           <div className={styles.promptWrapper}>
-            <span className={styles.prompt}>{prompt}&nbsp;</span>
+            <span
+              className={promptClass}
+            >{prompt}&nbsp;</span>
             <input
               disabled={this.state.commandInProgress}
               ref={ref => this.inputRef = ref}
