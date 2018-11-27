@@ -12,7 +12,7 @@ export type Props = {
   commands: any,
   welcomeMessage?: string,
   autoFocus: boolean,
-  noCommandFound: (str: string) => Promise<string>,
+  noCommandFound: (...str: string[]) => Promise<string>,
   promptClassName?: string,
 }
 
@@ -94,7 +94,7 @@ export default class ReactConsole extends React.Component<Props, State> {
       }
 
     } else {
-      const cmdNotFound = await this.props.noCommandFound(cmd);
+      const cmdNotFound = await this.props.noCommandFound(cmd, ...args);
       this.setState({
         output: [...this.state.output, log, cmdNotFound]
       })
