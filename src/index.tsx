@@ -6,6 +6,9 @@ import * as React from 'react'
 
 import styles from './styles.css'
 
+// @ts-ignore
+const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+
 export type Props = {
   text: string,
   prompt: string,
@@ -63,7 +66,7 @@ export default class ReactConsole extends React.Component<Props, State> {
 
     const log = `${prompt}\xa0${inputString}`;
 
-    if(inputString === '') {
+    if (inputString === '') {
       this.setState({
         output: [...this.state.output, log],
         input: '',
@@ -73,26 +76,20 @@ export default class ReactConsole extends React.Component<Props, State> {
 
     const [cmd, ...args] = inputString.split(" ");
 
-    if(cmd === 'clear') {
+    if (cmd === 'clear') {
       this.clear();
       return
     }
 
     const command = this.props.commands[cmd];
 
-
-    await this.setState({commandInProgress: true});
+    this.setState({commandInProgress: true});
 
     if (command) {
-      try {
-        const ret = await command.fn(...args);
-        await this.setState({
-          output: [...this.state.output, log, ret]
-        })
-      } catch (err) {
-
-      }
-
+      const ret = await command.fn(...args);
+      this.setState({
+        output: [...this.state.output, log, ret]
+      })
     } else {
       const cmdNotFound = await this.props.noCommandFound(cmd, ...args);
       this.setState({
@@ -115,7 +112,14 @@ export default class ReactConsole extends React.Component<Props, State> {
       : styles.prompt;
 
     return (
-      <div className={styles.wrapper} onClick={this.focusConsole} ref={ref => this.wrapperRef = ref}>
+      <div
+        className={styles.wrapper}
+        onClick={this.focusConsole}
+        ref={ref => this.wrapperRef = ref}
+        style={{
+          overflowY: isIE11 ? "scroll" : "auto",
+        }}
+      >
         <div>
           {this.state.output.map((line, key) =>
             <pre
@@ -157,8 +161,8 @@ export default class ReactConsole extends React.Component<Props, State> {
   };
 
   focusConsole = () => {
-    if(this.inputRef) {
-      if(document.getSelection().isCollapsed) {
+    if (this.inputRef) {
+      if (document.getSelection().isCollapsed) {
         this.inputRef.focus()
       }
     }

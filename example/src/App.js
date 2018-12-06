@@ -21,6 +21,71 @@ export default class App extends Component {
                 })
               }
             },
+            c: {
+              description: 'crashtest',
+              fn: () => {
+                return new Promise(resolve => {
+                  var x = `
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1234567890
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1dsj kfljdsafjks ladf
+                  1ksdl; fdsklajfklsadj fdsj kfljdsafjks ladf
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+                  1dsj kfljdsafjks ladf
+                  sdafjsad
+                  k fj asdpf234567890
+                  sdafjsad
+                  k fj asdpf234567890
+
+                  `
+                  resolve(x)
+                })
+              }
+            },
             sleep: {
               description: 'sleep',
               fn: (timeout) => {
