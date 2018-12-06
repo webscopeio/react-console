@@ -158,7 +158,7 @@ export default class ReactConsole extends React.Component<Props, State> {
 
   focusConsole = () => {
     if(this.inputRef) {
-      if(window.getSelection().type !== "Range") {
+      if(document.getSelection().isCollapsed) {
         this.inputRef.focus()
       }
     }
