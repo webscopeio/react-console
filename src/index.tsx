@@ -154,9 +154,13 @@ export default class ReactConsole extends React.Component<Props, State> {
     this.setState({
       input: e.target.value,
     })
-  }
+  };
 
   focusConsole = () => {
-    this.inputRef.focus()
+    if(this.inputRef) {
+      if(window.getSelection().type !== "Range") {
+        this.inputRef.focus()
+      }
+    }
   }
 }
