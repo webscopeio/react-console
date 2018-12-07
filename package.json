@@ -1,6 +1,6 @@
 {
   "name": "@webscopeio/react-console",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "React component that emulates console behaviour",
   "author": "jvorcak",
   "license": "MIT",

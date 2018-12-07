@@ -55,6 +55,12 @@ export default class ReactConsole extends React.Component<Props, State> {
     this.setState({output: [], input: ''})
   };
 
+  scrollToBottom = () => {
+    setTimeout(() => {
+      this.wrapperRef.scrollTop = this.wrapperRef.scrollHeight
+    })
+  };
+
   onSubmit = async (e: any) => {
     const {prompt} = this.props;
     e.preventDefault();
@@ -71,6 +77,7 @@ export default class ReactConsole extends React.Component<Props, State> {
         output: [...this.state.output, log],
         input: '',
       });
+      this.scrollToBottom()
       return
     }
 
@@ -98,6 +105,7 @@ export default class ReactConsole extends React.Component<Props, State> {
     }
     this.setState({commandInProgress: false, input: ''});
     this.inputRef.focus()
+    this.scrollToBottom()
   };
 
   render() {
