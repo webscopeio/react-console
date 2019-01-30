@@ -20,6 +20,25 @@ https://webscopeio.github.io/react-console/
 
 ![Webscope React Console](https://user-images.githubusercontent.com/1083817/48961581-14dce380-ef76-11e8-9d89-66c3815e46fe.png)
 
+## Props
+
+
+| Props                  | Type                                                                  | Description |
+| :--------------------- | :-------------------------------------------------------------------- |:--------------|
+| **commands***          | Object |
+| prompt                 | string |
+| welcomeMessage         | string |
+| autoFocus              | boolean|
+| noCommandFound         | (...str: string[]) => Promise<string> |
+| wrapperStyle           | Object                                                          | styles for the wrapper |
+| promptStyle            | Object                                                          | styles for the prompt |
+| inputStyle             | Object                                                          | styles for the input |
+| wrapperClassName       | string                                                          | className for the wrapper |
+| promptClassName        | string                                                          | className for the prompt |
+| inputClassName         | string                                                          | className for the input |
+
+\*_are mandatory_
+
 ## Usage
 
 ```tsx
