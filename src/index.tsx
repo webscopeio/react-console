@@ -3,6 +3,7 @@
  */
 
 import * as React from 'react'
+import classnames from 'classnames'
 
 import styles from './styles.css'
 
@@ -10,13 +11,17 @@ import styles from './styles.css'
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
 export type Props = {
-  text: string,
   prompt: string,
   commands: any,
   welcomeMessage?: string,
   autoFocus: boolean,
   noCommandFound: (...str: string[]) => Promise<string>,
   promptClassName?: string,
+  wrapperClassName?: string,
+  inputClassName?: string,
+  wrapperStyle?: object,
+  promptStyle?: object,
+  inputStyle?: object,
 }
 
 type State = {
@@ -34,6 +39,9 @@ export default class ReactConsole extends React.Component<Props, State> {
     prompt: '$',
     autoFocus: false,
     noCommandFound: (cmd: string) => Promise.resolve(`Command ${cmd} does not exist`),
+    wrapperStyle: {},
+    promptStyle: {},
+    inputStyle: {},
   };
 
   state = {
@@ -110,9 +118,14 @@ export default class ReactConsole extends React.Component<Props, State> {
 
   render() {
     const {
+      wrapperClassName,
+      promptClassName,
+      inputClassName,
+      wrapperStyle,
+      promptStyle,
+      inputStyle,
       prompt,
       autoFocus,
-      promptClassName,
     } = this.props;
 
     const promptClass = promptClassName
@@ -121,12 +134,13 @@ export default class ReactConsole extends React.Component<Props, State> {
 
     return (
       <div
-        className={styles.wrapper}
-        onClick={this.focusConsole}
-        ref={ref => this.wrapperRef = ref}
+        className={classnames([styles.wrapper, wrapperClassName])}
         style={{
           overflowY: isIE11 ? "scroll" : "auto",
+          ...wrapperStyle,
         }}
+        onClick={this.focusConsole}
+        ref={ref => this.wrapperRef = ref}
       >
         <div>
           {this.state.output.map((line, key) =>
@@ -140,7 +154,10 @@ export default class ReactConsole extends React.Component<Props, State> {
         <form
           onSubmit={this.onSubmit}
         >
-          <div className={styles.promptWrapper}>
+          <div
+            className={classnames([styles.promptWrapper, promptClassName])}
+            style={promptStyle}
+          >
             <span
               className={promptClass}
             >{prompt}&nbsp;</span>
@@ -154,7 +171,8 @@ export default class ReactConsole extends React.Component<Props, State> {
               spellCheck={false}
               autoCapitalize={'false'}
               name="input"
-              className={styles.input}
+              className={classnames([styles.input, inputClassName])}
+              style={inputStyle}
             />
           </div>
         </form>
