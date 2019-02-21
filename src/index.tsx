@@ -144,13 +144,11 @@ export default class ReactConsole extends React.Component<Props, State> {
       >
         <div>
           {this.state.output.map((line, key) =>
-            <code>
-              <pre
-                key={key}
-                className={styles.line}
-                dangerouslySetInnerHTML={{__html: line}}
-              />
-            </code>
+            <pre
+              key={key}
+              className={styles.line}
+              dangerouslySetInnerHTML={{__html: line}}
+            />
           )}
         </div>
         <form
