@@ -107,7 +107,7 @@ export default class ReactConsole extends React.Component<Props, State> {
   private onSubmit = async (e: any) => {
     e.preventDefault();
 
-    const inputString: string = this.state.input
+    const inputString: string = this.state.input;
     if (inputString === null) {
       return
     }
@@ -356,7 +356,12 @@ export default class ReactConsole extends React.Component<Props, State> {
    */
   private onKeyDown = (event: any) => {
     if (event.which === 38) { // key up
-      const historyPosition = Math.max(0, this.state.historyPosition - 1);
+      if(this.props.history === undefined) {
+        return
+      }
+
+      const currentPos = Math.min(this.state.historyPosition, this.props.history.length);
+      const historyPosition = Math.max(0, currentPos - 1);
       this.setPreviewPosition(historyPosition);
       event.preventDefault()
     } else if (event.which === 40) {
