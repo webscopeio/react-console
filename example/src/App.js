@@ -129,6 +129,10 @@ const App = () => {
           <td><code>sleep `ms`</code></td>
           <td>Sleeps for a number of milliseconds</td>
         </tr>
+        <tr>
+          <td><code>history</code></td>
+          <td>Shows a history</td>
+        </tr>
         </tbody>
       </table>
     </div>
