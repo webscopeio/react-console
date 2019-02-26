@@ -98,6 +98,12 @@ const App = () => {
 export default App
 ```
 
+## History implementation
+
+You can provide your own history implementation by providing `onAddHistoryItem` and `history` properties.
+If you don't provide `history`, up/down arrows & reverse search won't work.
+
+
 ## License
 
 IT © [jvorcak](https://github.com/jvorcak)

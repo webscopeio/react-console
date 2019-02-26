@@ -22,8 +22,8 @@ export type Props = {
   wrapperStyle?: object,
   promptStyle?: object,
   inputStyle?: object,
-  history: Array<string>,
-  onAddHistoryItem: (entry: string) => void,
+  history?: Array<string>,
+  onAddHistoryItem?: (entry: string) => void,
 }
 
 type State = {
@@ -48,7 +48,6 @@ export default class ReactConsole extends React.Component<Props, State> {
     wrapperStyle: {},
     promptStyle: {},
     inputStyle: {},
-    history: [],
   };
 
   state = {
@@ -67,9 +66,11 @@ export default class ReactConsole extends React.Component<Props, State> {
         output: [welcomeMessage],
       })
     }
-    this.setState({
-      historyPosition: this.props.history.length,
-    })
+    if (this.props.history !== undefined) {
+      this.setState({
+        historyPosition: this.props.history.length,
+      })
+    }
   }
 
   public clear = () => {
@@ -87,15 +88,17 @@ export default class ReactConsole extends React.Component<Props, State> {
    */
   private getReverseHistory = (): Array<boolean> => {
     const {reverseSearchString} = this.state;
-    return this.props.history.map(entry => (reverseSearchString === undefined || reverseSearchString === '') ?
-      // @ts-ignore
-      false : entry.includes(reverseSearchString))
+    return this.props.history === undefined ?
+      []
+      : this.props.history.map(entry => (reverseSearchString === undefined || reverseSearchString === '') ?
+        // @ts-ignore
+        false : entry.includes(reverseSearchString))
   };
 
   /**
    * Takes current text of a main input and generates a string that will be outputted as a log.
    */
-  private getCurrentTextSnapshot = () : string => {
+  private getCurrentTextSnapshot = (): string => {
     const {prompt} = this.props;
     const inputString: string = this.state.input;
     return `${prompt}\xa0${inputString}`;
@@ -269,6 +272,9 @@ export default class ReactConsole extends React.Component<Props, State> {
    * @param historyPosition
    */
   private setPreviewPosition = (historyPosition: number) => {
+    if(this.props.history === undefined) {
+      return
+    }
     this.setState({
       historyPosition,
       input: this.props.history[historyPosition] || '', // if an element history is out of bounds, we just set ''
@@ -354,11 +360,16 @@ export default class ReactConsole extends React.Component<Props, State> {
       this.setPreviewPosition(historyPosition);
       event.preventDefault()
     } else if (event.which === 40) {
+      if(this.props.history === undefined) {
+        return
+      }
       const historyPosition = Math.min(this.props.history.length, this.state.historyPosition + 1);
       this.setPreviewPosition(historyPosition);
       event.preventDefault()
     } else if (event.which === 82 && event.ctrlKey) { // ctrl + r
-      console.log('reverse search mode');
+      if(this.props.history === undefined) {
+        return
+      }
       this.onReverseSearch()
     } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
       this.setState({

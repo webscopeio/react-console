@@ -119,6 +119,9 @@ const App = () => {
           resolve('No command found')
         })}
       />
+      <p>
+        ctrl+r, ctrl+c shortcuts as well as up/down arrows are supported.
+      </p>
       <table>
         <tbody>
         <tr>
@@ -132,6 +135,10 @@ const App = () => {
         <tr>
           <td><code>history</code></td>
           <td>Shows a history</td>
+        </tr>
+        <tr>
+          <td><code>clear</code></td>
+          <td>Clear the terminal screen</td>
         </tr>
         </tbody>
       </table>
