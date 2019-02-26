@@ -22,13 +22,14 @@ export type Props = {
   wrapperStyle?: object,
   promptStyle?: object,
   inputStyle?: object,
+  history: Array<string>,
+  onAddHistoryItem: (entry: string) => void,
 }
 
 type State = {
   output: Array<string>,
   commandInProgress: boolean,
   input: string,
-  history?: Array<string>,
   historyPosition: number,
   reverseSearchString?: string,
   reverseSearchPosition: number,
@@ -47,20 +48,13 @@ export default class ReactConsole extends React.Component<Props, State> {
     wrapperStyle: {},
     promptStyle: {},
     inputStyle: {},
+    history: [],
   };
 
   state = {
     input: '',
     output: [],
     commandInProgress: false,
-    history: [
-      "hello1",
-      "hello2",
-      "ahojky",
-      "ahoj",
-      "hello3",
-      "world",
-    ],
     reverseSearchString: undefined,
     historyPosition: Infinity,
     reverseSearchPosition: Infinity,
@@ -74,15 +68,15 @@ export default class ReactConsole extends React.Component<Props, State> {
       })
     }
     this.setState({
-      historyPosition: this.state.history.length,
+      historyPosition: this.props.history.length,
     })
   }
 
-  clear = () => {
+  public clear = () => {
     this.setState({output: [], input: ''})
   };
 
-  scrollToBottom = () => {
+  public scrollToBottom = () => {
     setTimeout(() => {
       this.wrapperRef.scrollTop = this.wrapperRef.scrollHeight
     })
@@ -91,21 +85,23 @@ export default class ReactConsole extends React.Component<Props, State> {
   /**
    * Get filtered history entries based on reverse search string
    */
-  getReverseHistory = (): Array<boolean> => {
+  private getReverseHistory = (): Array<boolean> => {
     const {reverseSearchString} = this.state;
-    return this.state.history.map(entry => (reverseSearchString === undefined || reverseSearchString === '') ?
+    return this.props.history.map(entry => (reverseSearchString === undefined || reverseSearchString === '') ?
       // @ts-ignore
       false : entry.includes(reverseSearchString))
   };
 
-  // TODO rename
-  getLog = () => {
+  /**
+   * Takes current text of a main input and generates a string that will be outputted as a log.
+   */
+  private getCurrentTextSnapshot = () : string => {
     const {prompt} = this.props;
     const inputString: string = this.state.input;
     return `${prompt}\xa0${inputString}`;
   };
 
-  onSubmit = async (e: any) => {
+  private onSubmit = async (e: any) => {
     e.preventDefault();
 
     const inputString: string = this.state.input
@@ -113,7 +109,7 @@ export default class ReactConsole extends React.Component<Props, State> {
       return
     }
 
-    const log = this.getLog();
+    const log = this.getCurrentTextSnapshot();
 
     if (inputString === '') {
       this.setState({
@@ -226,9 +222,13 @@ export default class ReactConsole extends React.Component<Props, State> {
     )
   }
 
-  onReverseStringInputChange = (e: any) => {
+  /**
+   * Reverse search input handler
+   * @param event
+   */
+  private onReverseStringInputChange = (event: any) => {
     this.setState({
-      reverseSearchString: e.target.value,
+      reverseSearchString: event.target.value,
     }, () => {
       const history: Array<boolean> = this.getReverseHistory();
       const historyIndex: number = history.lastIndexOf(true);
@@ -236,13 +236,20 @@ export default class ReactConsole extends React.Component<Props, State> {
     })
   };
 
-  nextReverseSearch = () => {
+  /**
+   * Invoked when pressed ctrl+r and already in a reverse search mode.
+   */
+  private nextReverseSearch = () => {
     const history: Array<boolean> = this.getReverseHistory();
     const endOffset = Math.max(0, this.state.reverseSearchPosition - 1); // so that we don't go from the end again
     const historyIndex: number = history.lastIndexOf(true, endOffset);
     this.executeNextReverseSearch(historyIndex)
   };
 
+  /**
+   * Helper function that sets the history preview based on a requested history index.
+   * @param historyIndex
+   */
   private executeNextReverseSearch = (historyIndex: number) => {
     this.setState({
       reverseSearchPosition: historyIndex,
@@ -255,7 +262,24 @@ export default class ReactConsole extends React.Component<Props, State> {
     }
   };
 
-  onReverseSearch = () => {
+  /**
+   * This function sets a given history entry as a main input element content.
+   * It's called when changing the preview of a 'current' history entry e.g. by ctrl+r call, or
+   * when pressing up/down arrow.
+   * @param historyPosition
+   */
+  private setPreviewPosition = (historyPosition: number) => {
+    this.setState({
+      historyPosition,
+      input: this.props.history[historyPosition] || '', // if an element history is out of bounds, we just set ''
+    });
+  };
+
+  /**
+   * Enables reverse search.
+   * The side effect is that we focus o reverse search input.
+   */
+  private onReverseSearch = () => {
     // we enabled reverse search
     this.setState({
       reverseSearchString: '',
@@ -264,24 +288,39 @@ export default class ReactConsole extends React.Component<Props, State> {
     })
   };
 
-  onReverseSearchSubmit = (e: any) => {
-    e.preventDefault();
+  /**
+   * When reverse search is confirmed, we disable reverse search mode and keep the result.
+   * @param e
+   */
+  private onReverseSearchSubmit = (event: any) => {
+    event.preventDefault();
     this.disableReverseSearch();
   };
 
-  onInputChange = (e: any) => {
+  /**
+   * Main input change handler.
+   * @param event
+   */
+  private onInputChange = (event: any) => {
     this.setState({
-      input: e.target.value,
+      input: event.target.value,
     })
   };
 
-  isReverseSearchOn = (): boolean => this.state.reverseSearchString !== undefined;
+  /**
+   * Helper function to determine whether reverse search is active or not.
+   */
+  private isReverseSearchOn = (): boolean => this.state.reverseSearchString !== undefined;
 
-  disableReverseSearch = (reset: boolean = false) => {
+  /**
+   * Disables reverse search mode.
+   * @param keepPreviewString - determines whether the result of a reverse search should be kept or not
+   */
+  private disableReverseSearch = (keepPreviewString: boolean = true) => {
     this.setState({
       reverseSearchString: undefined,
     });
-    if (reset) {
+    if (!keepPreviewString) {
       this.setState({
         input: '',
       })
@@ -291,45 +330,50 @@ export default class ReactConsole extends React.Component<Props, State> {
     });
   };
 
-  onReverseKeyDown = (e: any) => {
-    if (e.which === 38 || e.which === 40) { // up or down
+  /**
+   * onKeyDown implementation of a reverse search input.
+   * @param event
+   */
+  private onReverseKeyDown = (event: any) => {
+    if (event.which === 38 || event.which === 40) { // up or down
       this.disableReverseSearch()
-    } else if (e.which === 67 && e.ctrlKey) { // ctrl + c
-      this.disableReverseSearch(true);
-    } else if (e.which === 82 && e.ctrlKey) { // ctrl + r
+    } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
+      this.disableReverseSearch(false);
+    } else if (event.which === 82 && event.ctrlKey) { // ctrl + r
       this.nextReverseSearch();
     }
   };
 
-  setPreviewPosition = (historyPosition: number) => {
-    this.setState({
-      historyPosition,
-      input: this.state.history[historyPosition] || '',
-    });
-  };
-
-  onKeyDown = (e: any) => {
-    if (e.which === 38) { // key up
+  /**
+   * onKeyDown implementation of a main input.
+   * @param event
+   */
+  private onKeyDown = (event: any) => {
+    if (event.which === 38) { // key up
       const historyPosition = Math.max(0, this.state.historyPosition - 1);
       this.setPreviewPosition(historyPosition);
-      e.preventDefault()
-    } else if (e.which === 40) {
-      const historyPosition = Math.min(this.state.history.length, this.state.historyPosition + 1);
+      event.preventDefault()
+    } else if (event.which === 40) {
+      const historyPosition = Math.min(this.props.history.length, this.state.historyPosition + 1);
       this.setPreviewPosition(historyPosition);
-      e.preventDefault()
-    } else if (e.which === 82 && e.ctrlKey) { // ctrl + r
+      event.preventDefault()
+    } else if (event.which === 82 && event.ctrlKey) { // ctrl + r
       console.log('reverse search mode');
       this.onReverseSearch()
-    } else if (e.which === 67 && e.ctrlKey) { // ctrl + c
+    } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
       this.setState({
-        output: [...this.state.output, this.getLog()],
+        output: [...this.state.output, this.getCurrentTextSnapshot()],
         input: '',
       });
       this.scrollToBottom();
     }
   };
 
-  focusConsole = () => {
+  /**
+   * Focuses console input.
+   * Whenever an user clicks on a terminal, we want to focus an actual input where he/she can type.
+   */
+  public focusConsole = () => {
     if (this.inputRef) {
       if (document.getSelection().isCollapsed) {
         this.inputRef.focus()
@@ -337,11 +381,17 @@ export default class ReactConsole extends React.Component<Props, State> {
     }
   };
 
-  private addHistoryEntry(inputString: string) {
-    const history: Array<string> = [...this.state.history, inputString];
+  /**
+   * Calls onAddHistoryItem property and sets historyPosition to a default value.
+   * @param inputString
+   */
+  private addHistoryEntry = (inputString: string) => {
+    const {onAddHistoryItem} = this.props;
+    if (typeof onAddHistoryItem === 'function') {
+      onAddHistoryItem(inputString);
+    }
     this.setState({
-      history,
-      historyPosition: history.length,
+      historyPosition: Infinity,
     })
   }
 }

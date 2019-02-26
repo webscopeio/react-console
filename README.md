@@ -36,6 +36,8 @@ https://webscopeio.github.io/react-console/
 | wrapperClassName       | string                                                          | className for the wrapper |
 | promptClassName        | string                                                          | className for the prompt |
 | inputClassName         | string                                                          | className for the input |
+| history                | Array<string>                                                   | history array           |
+| onAddHistoryItem       | (entry: string) => void                                         | callback called when a new history entry should be created | 
 
 \*_are mandatory_
 
@@ -46,43 +48,56 @@ import React, { Component } from 'react'
 
 import ReactConsole from 'react-console'
 
-export default class App extends Component {
-  render () {
-    return (
-      <div>
-        <ReactConsole
-          autoFocus
-          welcomeMessage="Welcome"
-          commands={{
-            echo: {
-              description: 'Echo',
-              fn: (...args) => {
-                return new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                    resolve(`${args.join(' ')}`)
-                  }, 2000)
-                })
-              }
-            },
-            test: {
-              description: 'Test',
-              fn: (...args) => {
-                return new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                    resolve('Hello world \n\n hello \n')
-                  }, 2000)
-                })
-              }
-            }
-          }}
-        />
-      </div>
-    )
-  }
-}
+const App = () => {
+  const [history, setHistory] = useState([
+    "echo hello world",
+    "sleep 1000",
+    "sleep 2000",
+    "sleep 3000",
+    "echo ola",
+    "not found",
+  ])
 
+  return (
+    <div>
+      <ReactConsole
+        autoFocus
+        welcomeMessage="Welcome"
+        commands={{
+          history: {
+            description: 'History',
+            fn: () => new Promise(resolve => {
+               resolve(`${history.join('\r\n')}`)
+            })
+          },
+          echo: {
+            description: 'Echo',
+            fn: (...args) => {
+              return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  resolve(`${args.join(' ')}`)
+                }, 2000)
+              })
+            }
+          },
+          test: {
+            description: 'Test',
+            fn: (...args) => {
+              return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  resolve('Hello world \n\n hello \n')
+                }, 2000)
+              })
+            }
+          }
+        }}
+      />
+    </div>
+  )
+}
+export default App
 ```
 
 ## License
 
-MIT © [jvorcak](https://github.com/jvorcak)
+IT © [jvorcak](https://github.com/jvorcak)
