@@ -102,6 +102,7 @@ export default class App extends Component {
           })}
         />
         <table>
+          <tbody>
           <tr>
             <td><code>echo ...args</code></td>
             <td>Echo</td>
@@ -110,6 +111,7 @@ export default class App extends Component {
             <td><code>sleep `ms`</code></td>
             <td>Sleeps for a number of milliseconds</td>
           </tr>
+          </tbody>
         </table>
       </div>
     )
