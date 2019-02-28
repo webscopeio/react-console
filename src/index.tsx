@@ -92,7 +92,7 @@ export default class ReactConsole extends React.Component<Props, State> {
       []
       : this.props.history.map(entry => (reverseSearchString === undefined || reverseSearchString === '') ?
         // @ts-ignore
-        false : entry.includes(reverseSearchString))
+        false : entry.indexOf(reverseSearchString) !== -1)
   };
 
   /**
@@ -343,10 +343,13 @@ export default class ReactConsole extends React.Component<Props, State> {
   private onReverseKeyDown = (event: any) => {
     if (event.which === 38 || event.which === 40) { // up or down
       this.disableReverseSearch()
+      event.preventDefault();
     } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
       this.disableReverseSearch(false);
+      event.preventDefault();
     } else if (event.which === 82 && event.ctrlKey) { // ctrl + r
       this.nextReverseSearch();
+      event.preventDefault();
     }
   };
 
@@ -376,12 +379,14 @@ export default class ReactConsole extends React.Component<Props, State> {
         return
       }
       this.onReverseSearch()
+      event.preventDefault()
     } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
       this.setState({
         output: [...this.state.output, this.getCurrentTextSnapshot()],
         input: '',
       });
       this.scrollToBottom();
+      event.preventDefault()
     }
   };
 
