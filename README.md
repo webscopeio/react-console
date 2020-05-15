@@ -106,4 +106,4 @@ If you don't provide `history`, up/down arrows & reverse search won't work.
 
 ## License
 
-IT © [jvorcak](https://github.com/jvorcak)
+[MIT](https://opensource.org/licenses/MIT) © [jvorcak](https://github.com/jvorcak)
