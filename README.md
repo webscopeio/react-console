@@ -25,7 +25,7 @@ https://webscopeio.github.io/react-console/
 
 | Props                  | Type                                                                  | Description |
 | :--------------------- | :-------------------------------------------------------------------- |:--------------|
-| **commands***          | Object |
+| **commands***          | **CommandsProp** |
 | prompt                 | string |
 | welcomeMessage         | string |
 | autoFocus              | boolean|
@@ -34,7 +34,7 @@ https://webscopeio.github.io/react-console/
 | promptWrapperStyle     | React.CSSProperties | styles for `promptWrapper` |
 | promptStyle            | React.CSSProperties | styles for `prompt` |
 | lineStyle              | React.CSSProperties | styles for `line` |
-| inputStyle             | React.CSSProperties | styles for input |
+| inputStyle             | React.CSSProperties | styles for `input |
 | wrapperClassName       | string | className for `wrapper` |
 | promptWrapperClassName | string | className for `promptWrapper` |
 | promptClassName        | string | className for `prompt` |
