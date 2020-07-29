@@ -30,14 +30,18 @@ https://webscopeio.github.io/react-console/
 | welcomeMessage         | string |
 | autoFocus              | boolean|
 | noCommandFound         | (...str: string[]) => Promise<string> |
-| wrapperStyle           | Object                                                          | styles for the wrapper |
-| promptStyle            | Object                                                          | styles for the prompt |
-| inputStyle             | Object                                                          | styles for the input |
-| wrapperClassName       | string                                                          | className for the wrapper |
-| promptClassName        | string                                                          | className for the prompt |
-| inputClassName         | string                                                          | className for the input |
-| history                | Array<string>                                                   | history array           |
-| onAddHistoryItem       | (entry: string) => void                                         | callback called when a new history entry should be created | 
+| wrapperStyle           | React.CSSProperties | styles for `wrapper` |
+| promptWrapperStyle     | React.CSSProperties | styles for `promptWrapper` |
+| promptStyle            | React.CSSProperties | styles for `prompt` |
+| lineStyle              | React.CSSProperties | styles for `line` |
+| inputStyle             | React.CSSProperties | styles for input |
+| wrapperClassName       | string | className for `wrapper` |
+| promptWrapperClassName | string | className for `promptWrapper` |
+| promptClassName        | string | className for `prompt` |
+| lineClassName          | string | className for `line` |
+| inputClassName         | string | className for `input` |
+| history                | string[] | history array |
+| onAddHistoryItem       | (entry: string) => void | callback called when a new history entry is created |
 
 \*_are mandatory_
 
