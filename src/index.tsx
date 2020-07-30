@@ -2,7 +2,7 @@
  * @class ReactConsole
  */
 
-import * as React from 'react'
+import React, { CSSProperties } from 'react'
 import classnames from 'classnames'
 
 import styles from './styles.css'
@@ -10,24 +10,35 @@ import styles from './styles.css'
 // @ts-ignore
 const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 
-export type Props = {
+type CommandsProp = {
+  [command: string]: {
+    description?: string,
+    fn: (...args: any[]) => Promise<any>
+  }
+}
+
+export type ReactConsoleProps = {
   prompt: string,
-  commands: any,
+  commands: CommandsProp,
   welcomeMessage?: string,
   autoFocus: boolean,
   noCommandFound: (...str: string[]) => Promise<string>,
-  promptClassName?: string,
   wrapperClassName?: string,
+  promptWrapperClassName?: string,
+  promptClassName?: string,
+  lineClassName?: string,
   inputClassName?: string,
-  wrapperStyle?: object,
-  promptStyle?: object,
-  inputStyle?: object,
-  history?: Array<string>,
+  wrapperStyle?: CSSProperties,
+  promptWrapperStyle: CSSProperties,
+  promptStyle?: CSSProperties,
+  lineStyle: CSSProperties,
+  inputStyle?: CSSProperties,
+  history?: string[],
   onAddHistoryItem?: (entry: string) => void,
 }
 
-type State = {
-  output: Array<string>,
+type ReactConsoleState = {
+  output: string[],
   commandInProgress: boolean,
   input: string,
   historyPosition: number,
@@ -35,7 +46,7 @@ type State = {
   reverseSearchPosition: number,
 }
 
-export default class ReactConsole extends React.Component<Props, State> {
+export default class ReactConsole extends React.Component<ReactConsoleProps, ReactConsoleState> {
 
   inputRef: any = null;
   wrapperRef: any = null;
@@ -155,22 +166,22 @@ export default class ReactConsole extends React.Component<Props, State> {
   render() {
     const {
       wrapperClassName,
+      promptWrapperClassName,
       promptClassName,
+      lineClassName,
       inputClassName,
       wrapperStyle,
+      promptWrapperStyle,
       promptStyle,
+      lineStyle,
       inputStyle,
       prompt,
       autoFocus,
     } = this.props;
 
-    const promptClass = promptClassName
-      ? `${styles.prompt} ${promptClassName}`
-      : styles.prompt;
-
     return (
       <div
-        className={classnames([styles.wrapper, wrapperClassName])}
+        className={classnames(styles.wrapper, wrapperClassName)}
         style={{
           overflowY: isIE11 ? "scroll" : "auto",
           ...wrapperStyle,
@@ -182,7 +193,8 @@ export default class ReactConsole extends React.Component<Props, State> {
           {this.state.output.map((line, key) =>
             <pre
               key={key}
-              className={styles.line}
+              className={classnames(styles.line, lineClassName)}
+              style={lineStyle}
               dangerouslySetInnerHTML={{__html: line}}
             />
           )}
@@ -191,11 +203,12 @@ export default class ReactConsole extends React.Component<Props, State> {
           onSubmit={this.onSubmit}
         >
           <div
-            className={classnames([styles.promptWrapper, promptClassName])}
-            style={promptStyle}
+            className={classnames(styles.promptWrapper, promptWrapperClassName)}
+            style={promptWrapperStyle}
           >
             <span
-              className={promptClass}
+              className={classnames(styles.prompt, promptClassName)}
+              style={promptStyle}
             >{prompt}&nbsp;</span>
             <input
               disabled={this.state.commandInProgress || this.isReverseSearchOn()}
@@ -396,7 +409,7 @@ export default class ReactConsole extends React.Component<Props, State> {
    */
   public focusConsole = () => {
     if (this.inputRef) {
-      if (document.getSelection().isCollapsed) {
+      if (document.getSelection()!.isCollapsed) {
         this.inputRef.focus()
       }
     }
