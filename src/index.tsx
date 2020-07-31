@@ -18,21 +18,25 @@ type CommandsProp = {
 }
 
 export type ReactConsoleProps = {
-  prompt: string,
+  // general props
   commands: CommandsProp,
-  welcomeMessage?: string,
-  autoFocus: boolean,
   noCommandFound: (...str: string[]) => Promise<string>,
+  autoFocus: boolean,
+  prompt: string,
+  welcomeMessage?: string | undefined,
+  // className props
   wrapperClassName?: string,
   promptWrapperClassName?: string,
   promptClassName?: string,
   lineClassName?: string,
   inputClassName?: string,
-  wrapperStyle?: CSSProperties,
+  // style props
+  wrapperStyle: CSSProperties,
   promptWrapperStyle: CSSProperties,
-  promptStyle?: CSSProperties,
+  promptStyle: CSSProperties,
   lineStyle: CSSProperties,
-  inputStyle?: CSSProperties,
+  inputStyle: CSSProperties,
+  // history props
   history?: string[],
   onAddHistoryItem?: (entry: string) => void,
 }
@@ -57,7 +61,9 @@ export default class ReactConsole extends React.Component<ReactConsoleProps, Rea
     autoFocus: false,
     noCommandFound: (cmd: string) => Promise.resolve(`Command ${cmd} does not exist`),
     wrapperStyle: {},
+    promptWrapperStyle: {},
     promptStyle: {},
+    lineStyle: {},
     inputStyle: {},
   };
 

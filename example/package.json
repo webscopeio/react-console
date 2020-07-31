@@ -7,7 +7,7 @@
   "dependencies": {
     "prop-types": "^15.6.2",
     "react": "16.8.0",
-    "react-console": "link:..",
+    "react-console": "..",
     "react-dom": "16.8.0",
     "react-scripts": "^1.1.4"
   },
