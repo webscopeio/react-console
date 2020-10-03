@@ -4,7 +4,10 @@ MIT-licensed console emulator in React. Documentation and more advanced features
 
 > React component that emulates console behaviour
 
-[![NPM](https://img.shields.io/npm/v/react-console.svg)](https://www.npmjs.com/package/react-console) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-console.svg)](https://www.npmjs.com/package/react-console)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+![license-sh badge](https://img.shields.io/endpoint?label=license-sh&url=https%3A%2F%2Flicense.sh%2Fapi%2Fshield%3Fowner%3Dwebscopeio%26repo%3Dreact-console%26repoID%3D158874576%26token_type%3Dbearer%26type%3Dgithub)
+
 
 ## Install
 
