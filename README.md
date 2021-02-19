@@ -45,6 +45,7 @@ https://webscopeio.github.io/react-console/
 | inputClassName         | string | className for `input` |
 | history                | string[] | history array |
 | onAddHistoryItem       | (entry: string) => void | callback called when a new history entry is created |
+| onSanitizeOutputLine   | (line: string) => string | callback called before a new output line is inserted to DOM |
 
 \*_are mandatory_
 

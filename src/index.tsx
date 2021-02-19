@@ -39,6 +39,7 @@ export type ReactConsoleProps = {
   // history props
   history?: string[],
   onAddHistoryItem?: (entry: string) => void,
+  onSanitizeOutputLine?: (line: string) => string,
 }
 
 type ReactConsoleState = {
@@ -185,6 +186,16 @@ export default class ReactConsole extends React.Component<ReactConsoleProps, Rea
       autoFocus,
     } = this.props;
 
+    const sanitizeOutputLine = (line: string): string => {
+      const {onSanitizeOutputLine} = this.props;
+
+      if (typeof onSanitizeOutputLine === 'function') {
+        return onSanitizeOutputLine(line)
+      }
+
+      return line
+    }
+
     return (
       <div
         className={classnames(styles.wrapper, wrapperClassName)}
@@ -196,13 +207,15 @@ export default class ReactConsole extends React.Component<ReactConsoleProps, Rea
         ref={ref => this.wrapperRef = ref}
       >
         <div>
-          {this.state.output.map((line, key) =>
-            <pre
-              key={key}
-              className={classnames(styles.line, lineClassName)}
-              style={lineStyle}
-              dangerouslySetInnerHTML={{__html: line}}
-            />
+          {this.state.output
+            .map(line => sanitizeOutputLine(line))
+            .map((line, key) =>
+              <pre
+                key={key}
+                className={classnames(styles.line, lineClassName)}
+                style={lineStyle}
+                dangerouslySetInnerHTML={{__html: line}}
+              />
           )}
         </div>
         <form
