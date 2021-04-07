@@ -115,22 +115,44 @@ export default class ReactConsole extends React.Component<ReactConsoleProps, Rea
 
   /**
    * Takes current text of a main input and generates a string that will be outputted as a log.
+   * @param input the input string provided to the control; when omitted, retrieves from state.input
    */
-  private getCurrentTextSnapshot = (): string => {
+  private getCurrentTextSnapshot = (input:string): string => {
     const {prompt} = this.props;
-    const inputString: string = this.state.input;
+    const inputString: string = input;
     return `${prompt}\xa0${inputString}`;
   };
 
-  private onSubmit = async (e: any) => {
-    e.preventDefault();
+  /**
+   * Accept an external command to run, and run it as if it were entered directly on the console
+   * @param input command to run
+   * @returns completion promise
+   */
+  public handleInput = async (input:string) => {
+    return this.onProcessInput(input);
+  }
 
-    const inputString: string = this.state.input;
+  /**
+   * Process input submitted from the input control
+   * @param e input control reference
+   * @returns completion promise
+   */
+  private onSubmit = async (e:any) => {
+    e.preventDefault(); // stop event bubbling
+    return this.onProcessInput(this.state.input);
+  }
+
+  /**
+   * Process input (from any source) and execute it as a command
+   * @param inputString command input string
+   * @returns completiong promise
+   */
+  private onProcessInput = async (inputString:string) => {
     if (inputString === null) {
       return
     }
 
-    const log = this.getCurrentTextSnapshot();
+    const log = this.getCurrentTextSnapshot(inputString);
 
     if (inputString === '') {
       this.setState({
@@ -414,7 +436,7 @@ export default class ReactConsole extends React.Component<ReactConsoleProps, Rea
       event.preventDefault()
     } else if (event.which === 67 && event.ctrlKey) { // ctrl + c
       this.setState({
-        output: [...this.state.output, this.getCurrentTextSnapshot()],
+        output: [...this.state.output, this.getCurrentTextSnapshot(this.state.input)],
         input: '',
       });
       this.scrollToBottom();
